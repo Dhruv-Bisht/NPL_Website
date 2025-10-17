@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player-Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+    <section class="header">
+        <h1>Player Registration</h1>
+    </section>
+
+    <form action="/player" method="post" enctype="multipart/form-data">
+        <!-- Name -->
+        <label for="">Name:</label>
+        <input type="text" name="name" id="" required>
+
+        <!-- Phone Number -->
+        <label for="">Phone Number:</label>
+        <input type="text" name="phone" id="" required>
+
+        <!-- Base Price -->
+        <label for="">Base Price:</label>
+        <input type="range" name="base_price" id="" min="1" max="5" required>
+
+        <!-- Role -->
+        <label for="">Role:</label>
+        <input type="radio" name="role" id="batsman" value="batsman"  required>Batsman
+        
+        <input type="radio" name="role" id="batsman" value="bowler">Bowler
+        
+        <input type="radio" name="role" id="all-rounder" value="bowler">All-Rounder
+        
+        <input type="radio" name="role" id="wicketkeeper" value="wicketkeeper">WicketKeeper
+
+        <!-- Photo Upload -->
+        <input type="file" name="photo" id="photo" accept="image/*" required>
+
+        <!-- Register  -->
+        <button type="submit">Register</button>
+    </form>
+
+    <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>

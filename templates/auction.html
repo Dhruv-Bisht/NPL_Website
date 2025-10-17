@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{font-family: Arial; background-color: #f0f0f0;padding:20px ;}
+        h1{
+            text-align: center;
+        }
+        .team-container{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex-direction: row;
+            gap:20px;
+        }
+        .player-card{
+            background: white;
+            padding: 20px;
+            width: 250px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .player-card img{
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction</h1>
+    <div class="team-container">
+    {% for player in players %}
+    <div class="player-card">
+        <img src="{{url_for('static',filename='uploads/'+player[5])}}" alt="{{player[1]}}" srcset="">
+        <h3>{{player[1]}} ({{player[4]}})</h3>
+        <p>Base Price:{{player[3]}}</p>
+
+        <form action="{{url_for('place_bid',player_id=player[0])}}" method="post">
+            <select name="team_id" id="" >
+                <option value="">Select from list</option>
+                {% for team in teams %}
+                <option value="{{team[0]}}">{{team[1]}}</option>
+                {% endfor %}
+            </select>
+            <input type="number" name="bid_amount" id="" min="{{player[3]}}" placeholder="Enter Bid" required>
+            <button type="submit">Place Bid</button>
+        </form>
+    </div>
+    {% endfor %}
+    </div>
+
+    <script src="bidding.js"></script>
+</body>
+</html>

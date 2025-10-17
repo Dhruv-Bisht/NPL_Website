@@ -1,0 +1,301 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPL</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+    <section class="header">
+        <h1>Northies Premier League</h1>
+    </section>
+
+    <section class="option">
+        <button id="player">Player</button>
+        <button id="captain">Team</button>
+        <button id="auction">Auction</button>
+        <button id="teams">Teams</button>
+        <button id="register_player">Register Players</button>
+    </section>
+    <!-- <script src="script.js"></script> -->
+    <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
+<!-- </body> -->
+<!-- </html> --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Northies Premier League</title>
+
+  <style>
+    /* ======= RESET ======= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(120deg, #001f4d, #003d99);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* ======= NAVBAR ======= */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background: linear-gradient(90deg, #001f4d, #004aad);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: background 0.3s ease-in-out;
+    }
+
+    .navbar:hover {
+      background: linear-gradient(90deg, #002b70, #0060cc);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      height: 45px;
+      width: 45px;
+      border-radius: 50%;
+      border: 2px solid #ffcc00;
+      box-shadow: 0 0 8px rgba(255,204,0,0.6);
+    }
+
+    .logo h2 {
+      color: #ffcc00;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: white;
+      font-weight: 500;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s, transform 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #ffcc00;
+      transform: scale(1.1);
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .menu-toggle span {
+      background: white;
+      height: 3px;
+      width: 25px;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        background: #002b70;
+        flex-direction: column;
+        width: 200px;
+        text-align: right;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        padding: 15px;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+    }
+
+    /* ======= HERO SECTION ======= */
+    .hero {
+      text-align: center;
+      padding: 100px 20px;
+      background: url('{{ url_for("static", filename="stadium_bg.jpg") }}') no-repeat center center/cover;
+      background-attachment: fixed;
+      color: white;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .hero h1 {
+      position: relative;
+      font-size: 3.5rem;
+      color: #ffcc00;
+      text-shadow: 2px 2px 10px rgba(255,204,0,0.5);
+      animation: fadeInDown 1.5s ease-in-out;
+    }
+
+    .hero p {
+      position: relative;
+      font-size: 1.3rem;
+      margin-top: 15px;
+      max-width: 600px;
+      color: #f0f0f0;
+      animation: fadeInUp 1.8s ease-in-out;
+    }
+
+    @keyframes fadeInDown {
+      from {opacity: 0; transform: translateY(-30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .btn-group {
+      position: relative;
+      margin-top: 40px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      background: #ffcc00;
+      color: #002b70;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(255,204,0,0.4);
+    }
+
+    .btn:hover {
+      background: #ffe066;
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(255,204,0,0.6);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #001f4d;
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======= NAVBAR ======= -->
+  <header class="navbar">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='npl_logo_1.png') }}" alt="NPL Logo">
+      <h2>Northies Premier League</h2>
+    </div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('player') }}">Register Player</a>
+      <a href="{{ url_for('captain') }}">Register Team</a>
+      <a href="{{ url_for('teams') }}">Teams</a>
+      <a href="{{ url_for('auction') }}">Auction</a>
+    </nav>
+
+    <div class="menu-toggle" id="menuToggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <!-- ======= HERO SECTION ======= -->
+  <section class="hero">
+    <h1>Welcome to Northies Premier League</h1>
+    <p>Experience the thrill of bidding, teamwork, and cricket like never before.  
+       Register your team, bid for your favorite players, and become the ultimate champion!</p>
+
+    <div class="btn-group">
+      <a href="{{ url_for('player') }}" class="btn">Register Player</a>
+      <a href="{{ url_for('captain') }}" class="btn">Register Team</a>
+      <a href="{{ url_for('auction') }}" class="btn">Start Auction</a>
+    </div>
+  </section>
+
+  <!-- ======= FOOTER ======= -->
+  <footer>
+    © 2025 Northies Premier League | Designed with 🏏 by Dhruv
+  </footer>
+
+  <!-- ======= JS ======= -->
+  <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    menuToggle.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+    });
+  </script>
+</body>
+</html>
+
