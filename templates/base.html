@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}NPL{% endblock %} · NPL</title>
+  <meta name="description" content="NPL cricket player registration and auction platform">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">N</span><span>NPL</span></a>
+  <div class="nav-links">
+    <a href="{{ url_for('players') }}">Players</a>
+    <a href="{{ url_for('teams') }}">Teams</a>
+    <a href="{{ url_for('auction') }}">Auction</a>
+    <a class="nav-register" href="{{ url_for('register') }}">Register</a>
+    {% if admin_logged_in %}
+      <a href="{{ url_for('admin') }}">Admin</a>
+      <a href="{{ url_for('admin_logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('admin_login') }}">Admin</a>
+    {% endif %}
+  </div>
+  <button class="menu" onclick="document.body.classList.toggle('menu-open')">☰</button>
+</nav>
+
+<main>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-wrap">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+{% block content %}{% endblock %}
+</main>
+
+<footer>
+  <div><strong>NPL</strong> · Player Intelligence & Auction Platform</div>
+  <div>{{ current_year }} · Built with Flask</div>
+</footer>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

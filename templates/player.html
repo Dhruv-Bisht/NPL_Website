@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ player.name }}{% endblock %}
+{% block content %}
+<section class="profile">
+  <div class="profile-avatar">{% if player.photo_data %}<img src="{{ player.photo_data }}" alt="{{ player.name }}">{% else %}<span>{{ player.name[0] }}</span>{% endif %}</div>
+  <div class="profile-main"><span class="eyebrow">{{ player.role }}</span><h1>{{ player.name }}</h1><p>{{ player.age }} years · {{ player.batting }}-hand bat · {{ player.bowling }}</p>
+    <span class="status {{ player.auction_status|lower }}">{{ player.auction_status }}</span>
+  </div>
+  <div class="profile-price"><small>BASE PRICE</small><strong>₹{{ "{:,}".format(player.base_price) }}</strong>{% if player.sold_price %}<small>SOLD FOR</small><strong>₹{{ "{:,}".format(player.sold_price) }}</strong>{% endif %}</div>
+</section>
+<div class="detail-grid">
+  <div class="detail-card"><span>PLAYER ID</span><strong>NPL-{{ "%04d"|format(player.id) }}</strong></div>
+  <div class="detail-card"><span>TEAM</span><strong>{% if player.team %}{{ player.team.name }}{% else %}Awaiting auction{% endif %}</strong></div>
+  <div class="detail-card"><span>CONTACT</span><strong>{{ player.email }}</strong></div>
+  <div class="detail-card"><span>PHONE</span><strong>{{ player.phone }}</strong></div>
+</div>
+{% endblock %}

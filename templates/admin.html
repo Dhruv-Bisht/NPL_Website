@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<section class="page-head compact"><span class="eyebrow">CONTROL ROOM</span><h1>Admin dashboard</h1><p>Create teams and manage the NPL auction.</p></section>
+<div class="admin-grid">
+  <section class="form-card"><h2>Create team</h2><form method="post" action="{{ url_for('create_team') }}" enctype="multipart/form-data">
+    <label>Team name<input required name="name" placeholder="Bangalore Blasters"></label>
+    <label>Short name<input required name="short_name" maxlength="6" placeholder="BB"></label>
+    <label>City<input required name="city" placeholder="Bangalore"></label>
+    <label>Starting purse<input required type="number" name="purse" value="10000" step="500"></label>
+    <label class="upload">Team logo<input type="file" name="logo" accept="image/*"><span>Optional · max 2 MB</span></label>
+    <button class="btn primary wide">Create team</button>
+  </form></section>
+  <section class="side-card"><span class="eyebrow">TEAMS</span><h2>{{ teams|length }} teams</h2>{% for t in teams %}<div class="admin-line"><span>{{ t.short_name }} · {{ t.name }}</span><strong>₹{{ "{:,}".format(t.purse) }}</strong></div>{% endfor %}</section>
+</div>
+<section class="section"><div class="section-head"><h2>Recent auction activity</h2><a href="{{ url_for('auction') }}">Open auction →</a></div>
+<div class="auction-list">{% for a in auctions %}<div class="auction-row"><div class="mini-avatar">🏏</div><div class="auction-info"><h3>{{ a.player.name }}</h3><small>{{ a.team.name if a.team else 'No team' }}</small></div><strong>₹{{ "{:,}".format(a.amount) }}</strong></div>{% else %}<div class="empty">No auction activity yet.</div>{% endfor %}</div></section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Auction{% endblock %}
+{% block content %}
+<section class="page-head compact"><span class="eyebrow">LIVE AUCTION ROOM</span><h1>Player auction</h1><p>All registered players enter the auction pool. Admin controls the sale.</p></section>
+<div class="auction-layout">
+  <div>
+    <div class="auction-toolbar"><strong>{{ players|length }} players</strong><span>🟢 Live system</span></div>
+    <div class="auction-list">
+    {% for p in players %}
+      <div class="auction-row">
+        <div class="mini-avatar">{% if p.photo_data %}<img src="{{ p.photo_data }}" alt="{{ p.name }}">{% else %}{{ p.name[0] }}{% endif %}</div>
+        <div class="auction-info"><span class="role">{{ p.role }}</span><h3>{{ p.name }}</h3><small>Base ₹{{ "{:,}".format(p.base_price) }} {% if p.team %}· {{ p.team.short_name }}{% endif %}</small></div>
+        <span class="status {{ p.auction_status|lower }}">{{ p.auction_status }}</span>
+        {% if p.auction_status == 'SOLD' %}<strong>₹{{ "{:,}".format(p.sold_price) }}</strong>{% endif %}
+        {% if admin_logged_in and p.auction_status != 'SOLD' %}
+        <form class="sell-form" method="post" action="{{ url_for('sell_player') }}">
+          <input type="hidden" name="player_id" value="{{ p.id }}">
+          <select name="team_id">{% for t in teams %}<option value="{{ t.id }}">{{ t.short_name }}</option>{% endfor %}</select>
+          <input name="amount" type="number" min="{{ p.base_price }}" value="{{ p.base_price }}" step="100">
+          <button class="btn small primary">Sell</button>
+        </form>
+        <form method="post" action="{{ url_for('mark_unsold', player_id=p.id) }}"><button class="btn small ghost">Unsold</button></form>
+        {% endif %}
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+  <aside class="auction-side">
+    <div class="side-card"><span class="eyebrow">HOW IT WORKS</span><h3>Simple, transparent auction.</h3><ol><li>Player registers.</li><li>Player enters auction pool.</li><li>Admin selects winning team and bid.</li><li>Player is assigned to that team's squad.</li><li>Team purse updates automatically.</li></ol></div>
+    <div class="side-card"><span class="eyebrow">ADMIN</span>{% if admin_logged_in %}<h3>Auction controls unlocked.</h3><a class="btn primary wide" href="{{ url_for('admin') }}">Open Admin</a>{% else %}<h3>Are you running the auction?</h3><a class="btn ghost wide" href="{{ url_for('admin_login') }}">Admin Login</a>{% endif %}</div>
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Players{% endblock %}
+{% block content %}
+<section class="page-head compact"><span class="eyebrow">PLAYER DIRECTORY</span><h1>All players</h1><p>Explore every registered player and their auction status.</p></section>
+<form class="filters">
+  <input name="q" value="{{ q }}" placeholder="Search player...">
+  <select name="role"><option value="">All roles</option>{% for r in ['Batter','Bowler','All-rounder','Wicketkeeper'] %}<option {% if role==r %}selected{% endif %}>{{ r }}</option>{% endfor %}</select>
+  <select name="status"><option value="">All status</option><option value="AVAILABLE" {% if status=='AVAILABLE' %}selected{% endif %}>Available</option><option value="SOLD" {% if status=='SOLD' %}selected{% endif %}>Sold</option><option value="UNSOLD" {% if status=='UNSOLD' %}selected{% endif %}>Unsold</option></select>
+  <button class="btn primary" type="submit">Filter</button>
+</form>
+<div class="player-grid">
+{% for p in players %}
+<a class="player-card" href="{{ url_for('player', player_id=p.id) }}">
+  <div class="avatar">{% if p.photo_data %}<img src="{{ p.photo_data }}" alt="{{ p.name }}">{% else %}<span>{{ p.name[0] }}</span>{% endif %}</div>
+  <div class="pc-body"><span class="role">{{ p.role }}</span><h3>{{ p.name }}</h3><p>{{ p.age }} yrs · {{ p.batting }} hand</p></div>
+  <div class="status {{ p.auction_status|lower }}">{{ p.auction_status }}</div>
+</a>
+{% else %}<div class="empty">No players match your filters.</div>{% endfor %}
+</div>
+{% endblock %}

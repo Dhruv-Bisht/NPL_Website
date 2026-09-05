@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">NATIONAL PREMIER LEAGUE</span>
+    <h1>Where players<br><span>meet their team.</span></h1>
+    <p>Register players, discover talent, build squads and run a transparent digital cricket auction.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="{{ url_for('register') }}">Register a Player →</a>
+      <a class="btn ghost" href="{{ url_for('auction') }}">Enter Auction</a>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="live"><i></i> AUCTION SYSTEM ONLINE</div>
+    <div class="hero-ball">🏏</div>
+    <div class="hero-card-bottom"><span>PLAYER POOL</span><strong>{{ players|length }}+</strong></div>
+  </div>
+</section>
+
+<section class="stats-grid">
+  <div class="stat"><span>REGISTERED PLAYERS</span><strong data-stat="players">—</strong></div>
+  <div class="stat"><span>TEAMS</span><strong data-stat="teams">—</strong></div>
+  <div class="stat"><span>SOLD</span><strong data-stat="sold">—</strong></div>
+  <div class="stat"><span>AVAILABLE</span><strong data-stat="available">—</strong></div>
+</section>
+
+<section class="section">
+  <div class="section-head"><div><span class="eyebrow">LATEST TALENT</span><h2>Recent players</h2></div><a href="{{ url_for('players') }}">View all →</a></div>
+  <div class="player-grid">
+    {% for p in players %}
+    <a class="player-card" href="{{ url_for('player', player_id=p.id) }}">
+      <div class="avatar">{% if p.photo_data %}<img src="{{ p.photo_data }}" alt="{{ p.name }}">{% else %}<span>{{ p.name[0] }}</span>{% endif %}</div>
+      <div class="pc-body"><span class="role">{{ p.role }}</span><h3>{{ p.name }}</h3><p>{{ p.batting }} bat · {{ p.bowling }}</p></div>
+      <div class="price">Base ₹{{ "{:,}".format(p.base_price) }}</div>
+    </a>
+    {% else %}
+    <div class="empty">No players yet. Be the first to register.</div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><div><span class="eyebrow">THE LEAGUE</span><h2>Teams</h2></div><a href="{{ url_for('teams') }}">View all →</a></div>
+  <div class="team-grid">
+    {% for t in teams %}
+    <a class="team-tile" href="{{ url_for('team', team_id=t.id) }}">
+      <div class="team-logo">{% if t.logo_data %}<img src="{{ t.logo_data }}" alt="{{ t.name }}">{% else %}{{ t.short_name[0] }}{% endif %}</div>
+      <div><span>{{ t.short_name }}</span><h3>{{ t.name }}</h3><small>{{ t.players|length }} squad members</small></div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

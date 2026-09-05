@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }}{% endblock %}
+{% block content %}
+<section class="team-hero">
+  <div class="team-logo huge">{% if team.logo_data %}<img src="{{ team.logo_data }}" alt="{{ team.name }}">{% else %}{{ team.short_name[0] }}{% endif %}</div>
+  <div><span class="eyebrow">{{ team.short_name }} · {{ team.city }}</span><h1>{{ team.name }}</h1><p>Squad · {{ players|length }} players</p></div>
+  <div class="purse"><small>PURSE REMAINING</small><strong>₹{{ "{:,}".format(team.purse) }}</strong></div>
+</section>
+<section class="section"><div class="section-head"><h2>Squad</h2></div>
+<div class="player-grid">
+{% for p in players %}
+<a class="player-card" href="{{ url_for('player', player_id=p.id) }}">
+<div class="avatar">{% if p.photo_data %}<img src="{{ p.photo_data }}" alt="{{ p.name }}">{% else %}<span>{{ p.name[0] }}</span>{% endif %}</div>
+<div class="pc-body"><span class="role">{{ p.role }}</span><h3>{{ p.name }}</h3><p>Sold for ₹{{ "{:,}".format(p.sold_price) }}</p></div>
+</a>
+{% else %}<div class="empty">This team has no players yet. Visit the auction.</div>{% endfor %}
+</div></section>
+{% endblock %}

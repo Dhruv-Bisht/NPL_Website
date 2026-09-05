@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Register Player{% endblock %}
+{% block content %}
+<section class="page-head"><span class="eyebrow">PLAYER REGISTRATION</span><h1>Enter the league.</h1><p>Your profile goes directly into the NPL player pool and auction system.</p></section>
+<form class="form-card" method="post" enctype="multipart/form-data">
+  <div class="form-section"><h2>Identity</h2><div class="form-grid">
+    <label>Full name<input required name="name" placeholder="e.g. Rahul Sharma"></label>
+    <label>Email<input required type="email" name="email" placeholder="rahul@email.com"></label>
+    <label>Phone<input required name="phone" placeholder="+91 98765 43210"></label>
+    <label>Age<input required type="number" min="12" max="60" name="age" placeholder="21"></label>
+  </div></div>
+  <div class="form-section"><h2>Cricket profile</h2><div class="form-grid">
+    <label>Primary role<select name="role"><option>Batter</option><option>Bowler</option><option>All-rounder</option><option>Wicketkeeper</option></select></label>
+    <label>Batting<select name="batting"><option>Right</option><option>Left</option></select></label>
+    <label>Bowling<select name="bowling"><option>None</option><option>Right-arm Fast</option><option>Right-arm Medium</option><option>Left-arm Fast</option><option>Off Spin</option><option>Leg Spin</option><option>Left-arm Orthodox</option></select></label>
+    <label>Base price (₹)<input required type="number" min="100" step="100" name="base_price" value="1000"></label>
+  </div></div>
+  <div class="form-section"><h2>Profile photo</h2><label class="upload">Choose a photo<input type="file" name="photo" accept="image/*"><span>PNG/JPG · max 2 MB</span></label></div>
+  <button class="btn primary wide" type="submit">Register & Enter Auction Pool →</button>
+</form>
+{% endblock %}

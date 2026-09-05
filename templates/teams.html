@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Teams{% endblock %}
+{% block content %}
+<section class="page-head compact"><span class="eyebrow">FRANCHISES</span><h1>Teams</h1><p>Every squad, every player, one place.</p></section>
+<div class="team-grid large">
+{% for t in teams %}
+<a class="team-tile" href="{{ url_for('team', team_id=t.id) }}">
+  <div class="team-logo">{% if t.logo_data %}<img src="{{ t.logo_data }}" alt="{{ t.name }}">{% else %}{{ t.short_name[0] }}{% endif %}</div>
+  <div><span>{{ t.short_name }} · {{ t.city }}</span><h3>{{ t.name }}</h3><small>{{ t.players|length }} players · ₹{{ "{:,}".format(t.purse) }} purse left</small></div>
+</a>
+{% endfor %}
+</div>
+{% endblock %}
