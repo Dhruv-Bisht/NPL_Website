@@ -2,7 +2,7 @@
 {% block title %}{{ player.name }}{% endblock %}
 {% block content %}
 <section class="profile">
-  <div class="profile-avatar">{% if player.photo_data %}<img src="{{ player.photo_data }}" alt="{{ player.name }}">{% else %}<span>{{ player.name[0] }}</span>{% endif %}</div>
+  <div class="profile-avatar">{% if player.photo_data %}<img src="{{ player.photo_data }}" alt="{{ player.name }}">{% else %}<span>{{ player.name[0]|upper }}</span>{% endif %}</div>
   <div class="profile-main"><span class="eyebrow">{{ player.role }}</span><h1>{{ player.name }}</h1><p>{{ player.age }} years · {{ player.batting }}-hand bat · {{ player.bowling }}</p>
     <span class="status {{ player.auction_status|lower }}">{{ player.auction_status }}</span>
   </div>

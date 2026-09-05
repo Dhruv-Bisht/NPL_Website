@@ -18,4 +18,18 @@
   <div class="form-section"><h2>Profile photo</h2><label class="upload">Choose a photo<input type="file" name="photo" accept="image/*"><span>PNG/JPG · max 2 MB</span></label></div>
   <button class="btn primary wide" type="submit">Register & Enter Auction Pool →</button>
 </form>
+
+<section class="section">
+  <div class="section-head"><div><span class="eyebrow">PLAYER POOL</span><h2>Registered players</h2></div></div>
+  <div class="player-grid">
+    {% for p in players %}
+    <a class="player-card" href="{{ url_for('player', player_id=p.id) }}">
+      <div class="avatar">{% if p.photo_data %}<img src="{{ p.photo_data }}" alt="{{ p.name }}">{% else %}<span>{{ p.name[0] }}</span>{% endif %}</div>
+      <div class="pc-body"><span class="role">{{ p.role }}</span><h3>{{ p.name }}</h3><p>{{ p.age }} yrs · {{ p.batting }} hand</p></div>
+    </a>
+    {% else %}
+    <div class="empty">No players registered yet — be the first.</div>
+    {% endfor %}
+  </div>
+</section>
 {% endblock %}
