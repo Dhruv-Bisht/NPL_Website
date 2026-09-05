@@ -10,12 +10,19 @@ from sqlalchemy import func, or_
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "change-this-secret-in-production")
 
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
 # Vercel's filesystem is read-only except /tmp.
 # Set DATABASE_URL to PostgreSQL for persistent production data.
 if os.getenv("DATABASE_URL"):
     database_url = os.getenv("DATABASE_URL")
+elif os.getenv("VERCEL"):
+    database_url = "sqlite:////tmp/npl.db"
 else:
-    database_url = "sqlite:////tmp/npl.db" if os.getenv("VERCEL") else "sqlite:///npl.db"
+    # Anchored to this file's own folder (not the process's current working
+    # directory) so `python app.py` always reads/writes the same npl.db
+    # regardless of which directory you happen to launch it from.
+    database_url = "sqlite:///" + os.path.join(BASE_DIR, "npl.db")
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
