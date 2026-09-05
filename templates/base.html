@@ -14,9 +14,10 @@
     html:not(.page-loading) #page-loader{opacity:0;pointer-events:none}
   </style>
   <script>document.documentElement.classList.add('page-loading');</script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v=4">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v=6">
 </head>
 <body>
+<div class="site-background" aria-hidden="true"></div>
 <div id="page-loader" aria-hidden="true"><div class="loader-box"><div class="loader-mark">N</div><div class="loader-text">LOADING NPL</div></div></div>
 <nav class="nav">
   <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">N</span><span>NPL</span></a>
