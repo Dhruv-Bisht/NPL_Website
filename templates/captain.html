@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+    <section class="header">
+        <h1>Team Registration</h1>
+    </section>
+
+    <form action="/captain" method="POST" enctype="multipart/form-data">
+        <!-- Team Name -->
+        <label for="">Team Name:</label>
+        <input type="text" name="team_name" id="" required>
+
+        <!-- Phone Number -->
+        <label for="">Phone Number:</label>
+        <input type="text" name="phone" id="" required>
+
+        <!-- Captain Name -->
+        <label for="">Captain Name:</label>
+        <input type="text" name="captain" id="" required>
+
+        <!-- Team Logo -->
+        <input type="file" name="logo" id="photo" accept="image/*" required>
+
+        <!-- Submit button -->
+        <button type="submit">Register</button>
+    </form>
+
+</body>
+</html> 

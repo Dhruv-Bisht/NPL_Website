@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register-Teams</title>
+    <style>
+        body{font-family: Arial; background-color: #f0f0f0;padding:20px ;}
+        h1{
+            text-align: center;
+        }
+        .team-container{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex-direction: row;
+            gap:20px;
+        }
+        .team-card{
+            background: white;
+            padding: 20px;
+            width: 250px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .team-card img{
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Registered Players</h1>
+    <div class="team-container">
+        {% for player in players %}
+        <div class="team-card">
+            {% if player[3] %}
+            <img src="{{url_for('static',filename='uploads/'+player[5])}}" alt="player Image"> <br>
+            
+            {% endif %}
+            <h3>{{ player[0] }}</h3>
+            <!-- <p>Name: {{ player[3]}}</p> -->
+            <p>Phone: {{ player[2] }}</p>
+            <p>Role: {{ player[4] }}</p>
+            <p>Base Price: {{ player[3] }}</p>
+            <form action="{{ url_for('delete_player', player_id=player[0]) }}" method="POST" style="margin-top:10px;">
+            <button type="submit" style="background:red;color:white;border:none;padding:5px 10px;cursor:pointer;">
+            Delete
+        </button>
+        </form>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

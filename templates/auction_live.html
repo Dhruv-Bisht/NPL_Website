@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Live Auction</title>
+<style>
+body { font-family: Arial; text-align: center; background: #f8f8f8; }
+img { width: 180px; height: 180px; border-radius: 50%; margin: 10px; }
+.container { background: white; width: 400px; margin: 40px auto; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+button { padding: 10px 20px; background: green; color: white; border: none; border-radius: 5px; cursor: pointer; }
+select, input { padding: 8px; width: 80%; margin: 5px 0; }
+#timer { font-size: 24px; color: red; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h2>Auction Live</h2>
+        <h3 id="timer">10</h3>
+        <img src="{{ url_for('static', filename='uploads/' + player[4]) }}" alt="Player">
+        <h3>{{ player[1] }}</h3>
+        <p>Role: {{ player[3] }}</p>
+        <p>Base Price: ₹{{ player[2] }}</p>
+
+        <form id="bidForm">
+            <input type="hidden" id="player_id" value="{{ player[0] }}">
+            <select id="team_id" required>
+                <option value="" disabled selected>Select Team</option>
+                {% for team in teams %}
+                <option value="{{ team[0] }}">{{ team[1] }}</option>
+                {% endfor %}
+            </select>
+            <input type="number" id="bid_amount" placeholder="Enter Bid Amount" min="{{ player[2] }}" required>
+            <button type="submit">Place Bid</button>
+        </form>
+
+        <p id="status"></p>
+    </div>
+<script>
+    let timeLeft = 10;
+    const timer = document.getElementById('timer');
+    const playerId = document.getElementById('player_id').value;
+
+    const countdown = setInterval(()=>
+        {timeLeft-- ; 
+        timer.textContent = timeLeft;
+        if(timeLeft<=0){
+            clearInterval(countdown);
+            finalizeAuction();
+        }
+    },1000);
+
+    document.getElementById('bidForm').addEventListener('submit',async(e)=>{
+        e.preventDefault();
+        const teamId = document.getElementById('team_id').value;
+
+        const bidAmount = document.getElementById('bid_amount').value;
+
+        await fetch('/bid',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({player_id:playerId, team_id:teamId,bid_amount:bidAmount})
+        });
+
+        document.getElementById('status').textContent='Bid Placed!';
+    });
+
+    async function finalizeAuction(){
+        document.getElementById('status').textContent='Auction closed.Finalizing....';
+
+        await fetch(`/finalize/${playerId}`,{method:'POST'});
+        setTimeout(()=>{
+            window.location.href = '/auction';
+        },2000);
+
+    }
+</script>
