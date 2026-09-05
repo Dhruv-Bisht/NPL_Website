@@ -5,12 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}NPL{% endblock %} · NPL</title>
   <meta name="description" content="NPL cricket player registration and auction platform">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html.page-loading body > *:not(#page-loader){visibility:hidden;opacity:0}
+    #page-loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#07100d;color:#f1f5f2;font-family:Inter,system-ui,sans-serif;transition:opacity .2s ease}
+    #page-loader .loader-box{text-align:center}
+    #page-loader .loader-mark{width:46px;height:46px;margin:0 auto 14px;border-radius:14px;background:#b8ff3d;color:#07100d;display:grid;place-items:center;font:900 22px 'Space Grotesk',Inter,sans-serif}
+    #page-loader .loader-text{font-size:11px;letter-spacing:2px;font-weight:800;opacity:.7}
+    html:not(.page-loading) #page-loader{opacity:0;pointer-events:none}
+  </style>
+  <script>document.documentElement.classList.add('page-loading');</script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body>
+<div id="page-loader" aria-hidden="true"><div class="loader-box"><div class="loader-mark">N</div><div class="loader-text">LOADING NPL</div></div></div>
 <nav class="nav">
   <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">N</span><span>NPL</span></a>
   <div class="nav-links">
