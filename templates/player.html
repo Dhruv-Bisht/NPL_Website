@@ -12,27 +12,39 @@
         <h1>Player Registration</h1>
     </section>
 
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul style="color:red; text-align:center; list-style:none;">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <form action="/player" method="post" enctype="multipart/form-data">
         <!-- Name -->
-        <label for="">Name:</label>
-        <input type="text" name="name" id="" required>
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" required>
 
         <!-- Phone Number -->
-        <label for="">Phone Number:</label>
-        <input type="text" name="phone" id="" required>
+        <label for="phone">Phone Number:</label>
+        <input type="text" name="phone" id="phone" required>
 
         <!-- Base Price -->
-        <label for="">Base Price:</label>
-        <input type="range" name="base_price" id="" min="1" max="5" required>
+        <label for="base_price">Base Price:</label>
+        <input type="range" name="base_price" id="base_price" min="1" max="5"
+               oninput="document.getElementById('base_price_val').textContent = this.value" required>
+        <span id="base_price_val">1</span>
 
         <!-- Role -->
-        <label for="">Role:</label>
-        <input type="radio" name="role" id="batsman" value="batsman"  required>Batsman
-        
-        <input type="radio" name="role" id="batsman" value="bowler">Bowler
-        
-        <input type="radio" name="role" id="all-rounder" value="bowler">All-Rounder
-        
+        <label>Role:</label>
+        <input type="radio" name="role" id="batsman" value="batsman" required>Batsman
+
+        <input type="radio" name="role" id="bowler" value="bowler">Bowler
+
+        <input type="radio" name="role" id="all-rounder" value="all-rounder">All-Rounder
+
         <input type="radio" name="role" id="wicketkeeper" value="wicketkeeper">WicketKeeper
 
         <!-- Photo Upload -->

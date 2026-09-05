@@ -5,21 +5,23 @@
 <title>Live Auction</title>
 <style>
 body { font-family: Arial; text-align: center; background: #f8f8f8; }
-img { width: 180px; height: 180px; border-radius: 50%; margin: 10px; }
+img { width: 180px; height: 180px; border-radius: 50%; margin: 10px; object-fit: cover; }
 .container { background: white; width: 400px; margin: 40px auto; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
 button { padding: 10px 20px; background: green; color: white; border: none; border-radius: 5px; cursor: pointer; }
 select, input { padding: 8px; width: 80%; margin: 5px 0; }
 #timer { font-size: 24px; color: red; margin-bottom: 10px; }
+#current_bid { font-weight: bold; color: #003366; min-height: 1.2em; }
 </style>
 </head>
 <body>
     <div class="container">
         <h2>Auction Live</h2>
         <h3 id="timer">10</h3>
-        <img src="{{ url_for('static', filename='uploads/' + player[4]) }}" alt="Player">
+        <img src="{{ url_for('static', filename='uploads/' + player[4]) if player[4] else 'npl_logo.png' }}" alt="Player">
         <h3>{{ player[1] }}</h3>
         <p>Role: {{ player[3] }}</p>
         <p>Base Price: ₹{{ player[2] }}</p>
+        <p id="current_bid">No bids yet</p>
 
         <form id="bidForm">
             <input type="hidden" id="player_id" value="{{ player[0] }}">
@@ -39,38 +41,65 @@ select, input { padding: 8px; width: 80%; margin: 5px 0; }
     let timeLeft = 10;
     const timer = document.getElementById('timer');
     const playerId = document.getElementById('player_id').value;
+    const currentBidEl = document.getElementById('current_bid');
+    let finalized = false;
 
-    const countdown = setInterval(()=>
-        {timeLeft-- ; 
+    async function refreshCurrentBid() {
+        try {
+            const res = await fetch(`/current_bid/${playerId}`);
+            const data = await res.json();
+            if (data.bid_amount !== null) {
+                currentBidEl.textContent = `Current highest bid: ₹${data.bid_amount} (${data.team_name})`;
+            }
+        } catch (err) {
+            // Ignore transient network errors during polling
+        }
+    }
+    refreshCurrentBid();
+    const bidPoll = setInterval(refreshCurrentBid, 2000);
+
+    const countdown = setInterval(() => {
+        timeLeft--;
         timer.textContent = timeLeft;
-        if(timeLeft<=0){
+        if (timeLeft <= 0) {
             clearInterval(countdown);
+            clearInterval(bidPoll);
             finalizeAuction();
         }
-    },1000);
+    }, 1000);
 
-    document.getElementById('bidForm').addEventListener('submit',async(e)=>{
+    document.getElementById('bidForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const teamId = document.getElementById('team_id').value;
-
         const bidAmount = document.getElementById('bid_amount').value;
 
-        await fetch('/bid',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({player_id:playerId, team_id:teamId,bid_amount:bidAmount})
+        const res = await fetch('/bid', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ player_id: playerId, team_id: teamId, bid_amount: bidAmount })
         });
+        const data = await res.json();
 
-        document.getElementById('status').textContent='Bid Placed!';
+        if (data.status === 'success') {
+            document.getElementById('status').textContent = 'Bid Placed!';
+            refreshCurrentBid();
+        } else {
+            document.getElementById('status').textContent = data.message || 'Bid failed.';
+        }
     });
 
-    async function finalizeAuction(){
-        document.getElementById('status').textContent='Auction closed.Finalizing....';
+    async function finalizeAuction() {
+        if (finalized) return;
+        finalized = true;
+        document.getElementById('status').textContent = 'Auction closed. Finalizing...';
 
-        await fetch(`/finalize/${playerId}`,{method:'POST'});
-        setTimeout(()=>{
+        // The server determines the winning bid itself from the auctions
+        // table - no bid data needs to (or should) come from the client.
+        await fetch(`/finalize/${playerId}`, { method: 'POST' });
+        setTimeout(() => {
             window.location.href = '/auction';
-        },2000);
-
+        }, 2000);
     }
 </script>
+</body>
+</html>

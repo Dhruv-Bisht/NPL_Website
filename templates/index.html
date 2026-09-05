@@ -260,6 +260,12 @@
       <a href="{{ url_for('captain') }}">Register Team</a>
       <a href="{{ url_for('teams') }}">Teams</a>
       <a href="{{ url_for('auction') }}">Auction</a>
+      <a href="{{ url_for('register_player') }}">Registered Players</a>
+      {% if session.get('is_admin') %}
+      <a href="{{ url_for('admin_logout') }}">Admin Logout</a>
+      {% else %}
+      <a href="{{ url_for('admin_login') }}">Admin Login</a>
+      {% endif %}
     </nav>
 
     <div class="menu-toggle" id="menuToggle">

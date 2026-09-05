@@ -12,6 +12,16 @@
         <h1>Team Registration</h1>
     </section>
 
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul style="color:red; text-align:center; list-style:none;">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <form action="/captain" method="POST" enctype="multipart/form-data">
         <!-- Team Name -->
         <label for="">Team Name:</label>

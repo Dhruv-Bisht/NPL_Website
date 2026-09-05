@@ -37,15 +37,20 @@
     <div class="team-container">
         {% for player in players %}
         <div class="team-card">
-            {% if player[3] %}
+            {% if player[5] %}
             <img src="{{url_for('static',filename='uploads/'+player[5])}}" alt="player Image"> <br>
             
             {% endif %}
-            <h3>{{ player[0] }}</h3>
-            <!-- <p>Name: {{ player[3]}}</p> -->
+            <h3>{{ player[1] }}</h3>
             <p>Phone: {{ player[2] }}</p>
             <p>Role: {{ player[4] }}</p>
             <p>Base Price: {{ player[3] }}</p>
+            <p>
+                {% if player[6] == 1 %}Status: Sold
+                {% elif player[6] == 2 %}Status: Unsold
+                {% else %}Status: Available
+                {% endif %}
+            </p>
             <form action="{{ url_for('delete_player', player_id=player[0]) }}" method="POST" style="margin-top:10px;">
             <button type="submit" style="background:red;color:white;border:none;padding:5px 10px;cursor:pointer;">
             Delete

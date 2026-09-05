@@ -37,13 +37,13 @@
     <div class="team-container">
         {% for team in teams %}
         <div class="team-card">
-            {% if team[3] %}
+            {% if team[4] %}
             <img src="{{url_for('static',filename='uploads/'+team[4])}}" alt="Team Logo"> <br>
             
             {% endif %}
             <h3>{{ team[1] }}</h3>
-            <p>Captain: {{ team[3]}}</p>
-            <p>Phone: {{ team[2] }}</p>
+            <p>Captain: {{ team[2] }}</p>
+            <p>Phone: {{ team[3] }}</p>
             <form action="{{ url_for('delete_team', team_id=team[0]) }}" method="POST" style="margin-top:10px;">
             <button type="submit" style="background:red;color:white;border:none;padding:5px 10px;cursor:pointer;">
             Delete
