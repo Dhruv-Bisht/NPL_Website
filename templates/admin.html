@@ -11,7 +11,7 @@
     <label class="upload">Team logo<input type="file" name="logo" accept="image/*"><span>Optional · max 2 MB</span></label>
     <button class="btn primary wide">Create team</button>
   </form></section>
-  <section class="side-card"><span class="eyebrow">TEAMS</span><h2>{{ teams|length }} teams</h2>{% for t in teams %}<div class="admin-line"><span>{{ t.short_name }} · {{ t.name }}</span><strong>₹{{ "{:,}".format(t.purse) }}</strong></div>{% endfor %}</section>
+  <section class="side-card"><span class="eyebrow">TEAMS</span><h2>{{ teams|length }} teams</h2>{% for t in teams %}<div class="admin-line team-admin-line"><div><span>{{ t.short_name }} · {{ t.name }}</span><small>{{ t.players|length }} player{{ '' if t.players|length == 1 else 's' }}</small></div><div class="team-admin-actions"><strong>₹{{ "{:,}".format(t.purse) }}</strong><form method="post" action="{{ url_for('delete_team', team_id=t.id) }}" onsubmit="return confirm('Delete {{ t.name|e }}? This will also delete this team's auction history.');"><button class="btn danger small" type="submit">Delete</button></form></div></div>{% endfor %}</section>
 </div>
 <section class="section"><div class="section-head"><h2>Recent auction activity</h2><a href="{{ url_for('auction') }}">Open auction →</a></div>
 <div class="auction-list">{% for a in auctions %}<div class="auction-row"><div class="mini-avatar">🏏</div><div class="auction-info"><h3>{{ a.player.name }}</h3><small>{{ a.team.name if a.team else 'No team' }}</small></div><strong>₹{{ "{:,}".format(a.amount) }}</strong></div>{% else %}<div class="empty">No auction activity yet.</div>{% endfor %}</div></section>

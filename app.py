@@ -259,6 +259,25 @@ def create_team():
     flash("Team created.", "success")
     return redirect(url_for("admin"))
 
+@app.route("/admin/team/<int:team_id>/delete", methods=["POST"])
+@admin_required
+def delete_team(team_id):
+    team = db.get_or_404(Team, team_id)
+
+    # Never silently remove a squad. A team with players must be emptied first.
+    squad_size = Player.query.filter_by(team_id=team.id).count()
+    if squad_size > 0:
+        flash(f"Cannot delete {team.name}: remove its {squad_size} squad player(s) first.", "error")
+        return redirect(url_for("admin"))
+
+    # Remove auction records belonging to the team before deleting it.
+    Auction.query.filter_by(team_id=team.id).delete(synchronize_session=False)
+    team_name = team.name
+    db.session.delete(team)
+    db.session.commit()
+    flash(f"{team_name} deleted successfully.", "success")
+    return redirect(url_for("admin"))
+
 @app.route("/api/stats")
 def stats():
     return jsonify({
