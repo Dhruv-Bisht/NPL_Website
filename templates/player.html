@@ -1,60 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player-Registration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% extends "base.html" %}
+{% block title %}Player Registration - NPL{% endblock %}
+{% block content %}
+  <div class="page-header">
+    <h1>Player Registration</h1>
+    <p>Step up to the crease — register to be part of the auction pool.</p>
+  </div>
 
-</head>
-<body>
-    <section class="header">
-        <h1>Player Registration</h1>
-    </section>
-
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul style="color:red; text-align:center; list-style:none;">
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-
+  <div class="container">
     <form action="/player" method="post" enctype="multipart/form-data">
-        <!-- Name -->
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name" required>
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" placeholder="Enter your full name" required>
+      </div>
 
-        <!-- Phone Number -->
-        <label for="phone">Phone Number:</label>
-        <input type="text" name="phone" id="phone" required>
+      <div class="field">
+        <label>Role</label>
+        <div class="role-group">
+          <input type="radio" name="role" id="batsman" value="batsman" required>
+          <label for="batsman">🏏 Batsman</label>
 
-        <!-- Base Price -->
-        <label for="base_price">Base Price:</label>
-        <input type="range" name="base_price" id="base_price" min="1" max="5"
-               oninput="document.getElementById('base_price_val').textContent = this.value" required>
-        <span id="base_price_val">1</span>
+          <input type="radio" name="role" id="bowler" value="bowler">
+          <label for="bowler">🎯 Bowler</label>
 
-        <!-- Role -->
-        <label>Role:</label>
-        <input type="radio" name="role" id="batsman" value="batsman" required>Batsman
+          <input type="radio" name="role" id="all-rounder" value="all-rounder">
+          <label for="all-rounder">⚡ All-Rounder</label>
 
-        <input type="radio" name="role" id="bowler" value="bowler">Bowler
+          <input type="radio" name="role" id="wicketkeeper" value="wicketkeeper">
+          <label for="wicketkeeper">🧤 WicketKeeper</label>
+        </div>
+      </div>
 
-        <input type="radio" name="role" id="all-rounder" value="all-rounder">All-Rounder
+      <div class="field">
+        <label>Photo</label>
+        <div class="file-upload">
+          <input type="file" name="photo" id="photo" accept="image/*" required
+                 onchange="document.getElementById('photoLabel').textContent = this.files[0] ? this.files[0].name : 'Tap to upload your photo';">
+          <div class="file-upload-label" id="photoLabel">
+            <span class="file-icon">📷</span> Tap to upload your photo
+          </div>
+        </div>
+      </div>
 
-        <input type="radio" name="role" id="wicketkeeper" value="wicketkeeper">WicketKeeper
-
-        <!-- Photo Upload -->
-        <input type="file" name="photo" id="photo" accept="image/*" required>
-
-        <!-- Register  -->
-        <button type="submit">Register</button>
+      <button type="submit">Register</button>
     </form>
 
-    <br>
-    <a href="/">Back to Home</a>
-</body>
-</html>
+    <a href="/" class="back-link">← Back to Home</a>
+  </div>
+{% endblock %}

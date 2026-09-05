@@ -141,11 +141,9 @@ def home():
 def player():
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
-        phone = request.form.get('phone', '').strip()
-        base_price = request.form.get('base_price', '').strip()
         role = request.form.get('role', '').strip()
 
-        if not name or not phone or not base_price or not role:
+        if not name or not role:
             flash('Please fill in all required fields.')
             return render_template('player.html')
 
@@ -155,12 +153,15 @@ def player():
             flash(str(e))
             return render_template('player.html')
 
+        # Phone number and base price are no longer collected at
+        # registration time - base price is set later (e.g. by an admin
+        # ahead of the auction).
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute('''
                 INSERT INTO players(name, phone, base_price, role, image_filename)
                 VALUES (?, ?, ?, ?, ?)
-            ''', (name, phone, base_price, role, image_filename))
+            ''', (name, None, None, role, image_filename))
             conn.commit()
 
         return redirect(url_for('home'))

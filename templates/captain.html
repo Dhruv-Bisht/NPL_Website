@@ -1,46 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% extends "base.html" %}
+{% block title %}Team Registration - NPL{% endblock %}
+{% block content %}
+  <div class="page-header">
+    <h1>Team Registration</h1>
+    <p>Bring your squad to the auction table.</p>
+  </div>
 
-</head>
-<body>
-    <section class="header">
-        <h1>Team Registration</h1>
-    </section>
-
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul style="color:red; text-align:center; list-style:none;">
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-
+  <div class="container">
     <form action="/captain" method="POST" enctype="multipart/form-data">
-        <!-- Team Name -->
-        <label for="">Team Name:</label>
-        <input type="text" name="team_name" id="" required>
+      <div class="field">
+        <label for="team_name">Team Name</label>
+        <input type="text" name="team_name" id="team_name" placeholder="Enter team name" required>
+      </div>
 
-        <!-- Phone Number -->
-        <label for="">Phone Number:</label>
-        <input type="text" name="phone" id="" required>
+      <div class="field">
+        <label for="phone">Phone Number</label>
+        <input type="text" name="phone" id="phone" placeholder="Enter contact number" required>
+      </div>
 
-        <!-- Captain Name -->
-        <label for="">Captain Name:</label>
-        <input type="text" name="captain" id="" required>
+      <div class="field">
+        <label for="captain">Captain Name</label>
+        <input type="text" name="captain" id="captain" placeholder="Enter captain's name" required>
+      </div>
 
-        <!-- Team Logo -->
-        <input type="file" name="logo" id="photo" accept="image/*" required>
+      <div class="field">
+        <label>Team Logo</label>
+        <div class="file-upload">
+          <input type="file" name="logo" id="logo" accept="image/*" required
+                 onchange="document.getElementById('logoLabel').textContent = this.files[0] ? this.files[0].name : 'Tap to upload team logo';">
+          <div class="file-upload-label" id="logoLabel">
+            <span class="file-icon">🛡️</span> Tap to upload team logo
+          </div>
+        </div>
+      </div>
 
-        <!-- Submit button -->
-        <button type="submit">Register</button>
+      <button type="submit">Register</button>
     </form>
 
-</body>
-</html> 
+    <a href="/" class="back-link">← Back to Home</a>
+  </div>
+{% endblock %}
