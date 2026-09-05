@@ -5,12 +5,17 @@ from functools import wraps
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "change-this-secret-in-production")
 
-database_url = os.getenv("DATABASE_URL", "sqlite:///npl.db")
+# Vercel's filesystem is read-only except /tmp.
+# Set DATABASE_URL to PostgreSQL for persistent production data.
+if os.getenv("DATABASE_URL"):
+    database_url = os.getenv("DATABASE_URL")
+else:
+    database_url = "sqlite:////tmp/npl.db" if os.getenv("VERCEL") else "sqlite:///npl.db"
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
@@ -130,7 +135,7 @@ def players():
     query = Player.query.filter_by(registered=True)
     if q:
         query = query.filter(
-            db.or_(Player.name.ilike(f"%{q}%"), Player.email.ilike(f"%{q}%"))
+            or_(Player.name.ilike(f"%{q}%"), Player.email.ilike(f"%{q}%"))
         )
     if role:
         query = query.filter_by(role=role)
@@ -237,7 +242,7 @@ def create_team():
     city = request.form["city"].strip()
     purse = int(request.form.get("purse", 10000))
 
-    if Team.query.filter(db.or_(func.lower(Team.name) == name.lower(), func.lower(Team.short_name) == short_name.lower())).first():
+    if Team.query.filter(or_(func.lower(Team.name) == name.lower(), func.lower(Team.short_name) == short_name.lower())).first():
         flash("Team name or short name already exists.", "error")
         return redirect(url_for("admin"))
 
